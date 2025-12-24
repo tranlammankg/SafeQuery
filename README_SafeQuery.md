@@ -1,7 +1,7 @@
-# Công cụ Truy vấn An toàn (BA Safe Query)
+# Công cụ Truy vấn An toàn (SafeQuery)
 
 ## 1. Tổng quan
-**BA Safe Query** là một ứng dụng Python (Giao diện Tkinter) được thiết kế riêng cho các Business Analyst (BA) hoặc người dùng cần truy vấn dữ liệu từ SQL Server một cách nhanh chóng, trực quan và đặc biệt là **an toàn**. 
+**SafeQuery** là một ứng dụng Python (Giao diện Tkinter) được thiết kế riêng cho các Business Analyst (BA) hoặc người dùng cần truy vấn dữ liệu từ SQL Server một cách nhanh chóng, trực quan và đặc biệt là **an toàn**. 
 
 Ứng dụng giúp ngăn chặn các rủi ro làm treo hệ thống hoặc thay đổi dữ liệu ngoài ý muốn bằng các lớp bảo vệ phần cứng và phần mềm tích hợp sẵn.
 
@@ -30,14 +30,40 @@
 
 ---
 
-## 3. Chi tiết Giao diện
+## 3. Cài đặt và Chạy Ứng dụng
+
+### Yêu cầu Hệ thống
+- **Hệ điều hành:** Windows 10 hoặc 11 (hỗ trợ tốt nhất).
+- **Python:** Phiên bản 3.8 trở lên.
+- **ODBC Driver:** Microsoft ODBC Driver 17 hoặc 18 for SQL Server.
+- **Quyền truy cập:** Tài khoản Windows có quyền SELECT trên database đích.
+
+### Cài đặt
+1. **Cài đặt Python:** Tải từ [python.org](https://www.python.org/downloads/).
+2. **Cài đặt ODBC Driver:** Tải từ [Microsoft Download](https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server).
+3. **Cài đặt thư viện Python:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+### Chạy Ứng dụng
+- **Từ mã nguồn:**
+  ```bash
+  python app.py
+  ```
+- **Từ file executable (nếu có):** Chạy file `SafeQuery.exe` trực tiếp.
+
+---
+
+## 4. Chi tiết Giao diện
 
 ### Khu vực Cấu hình (Top)
-- **Server & Database:** Cho phép chọn máy chủ và cơ sở dữ liệu (Mặc định: `Pa-vm90` / `LiveEpicor1015`).
+- **Server & Database:** Cho phép chọn máy chủ và cơ sở dữ liệu từ danh sách lịch sử.
+- **Driver:** Tự động chọn driver ODBC tốt nhất có sẵn.
 - **Windows Authentication:** Tự động sử dụng tài khoản Windows đang đăng nhập (Trusted Connection), không cần nhập mật khẩu thủ công.
 
 ### Khu vực Nhập liệu (Middle)
-- **SQL Editor:** Sử dụng font chữ `Consolas` chuyên dụng cho lập trình.
+- **SQL Editor:** Sử dụng font chữ `Consolas` chuyên dụng cho lập trình, với syntax highlighting.
 - **Phím tắt F5:** Nhấn F5 để thực thi câu lệnh nhanh chóng giống như trong SQL Management Studio.
 - **Chạy vùng chọn:** Nếu bạn bôi đen một đoạn code, tool sẽ chỉ thực hiện đoạn đó.
 
@@ -48,22 +74,44 @@
 
 ---
 
-## 4. Xử lý Lỗi Thông minh
+## 5. Xử lý Lỗi Thông minh
 Ứng dụng dịch các mã lỗi SQL thô cứng thành thông báo tiếng Việt dễ hiểu:
-- **Timeout:** "⏱️ Hệ thống bận."
-- **Quá tải:** "🛑 Query quá nặng."
-- **Đăng nhập:** "🔐 Kiểm tra Server/DB hoặc Quyền Windows."
+- **Timeout:** "⏱️ LỖI TIMEOUT: Hệ thống bận bị lock quá 3 giây."
+- **Quá tải:** "🛑 LỖI QUÁ TẢI: Query quá nặng. Chi phí Est thực thi quá 3000 Cost"
+- **Đăng nhập:** "🔐 LỖI ĐĂNG NHẬP: Kiểm tra Server/DB hoặc Quyền Windows."
 
 ---
 
-## 5. Hướng dẫn Sử dụng & Xuất dữ liệu
+## 6. Hướng dẫn Sử dụng & Xuất dữ liệu
 - **Copy to Excel:** Nhấn nút "COPY TẤT CẢ" để đưa toàn bộ các bảng vào Clipboard. Định dạng Tab-separated giúp dán trực tiếp vào Excel mà không bị lệch cột.
 - **Save CSV:** Xuất dữ liệu ra file `.csv` với mã hóa `utf-8-sig` (đảm bảo không lỗi font tiếng Việt khi mở bằng Excel).
 - **Cuộn chuột:** Hỗ trợ cuộn chuột trên toàn bộ vùng kết quả để duyệt dữ liệu nhanh.
 
+### Ví dụ Sử dụng
+1. Chọn Server và Database.
+2. Nhập câu lệnh SQL SELECT, ví dụ:
+   ```sql
+   SELECT TOP 10 * FROM Customers;
+   ```
+3. Nhấn F5 hoặc nút "CHẠY TRUY VẤN".
+4. Xem kết quả và xuất dữ liệu nếu cần.
+
 ---
 
-## 6. Yêu cầu Hệ thống
-- **Ngôn ngữ:** Python 3.x
-- **Thư viện:** `pyodbc`, `tkinter`
-- **Driver:** Microsoft ODBC Driver 17 for SQL Server.
+## 7. Khắc phục Sự cố
+- **Lỗi Driver not found:** Cài đặt Microsoft ODBC Driver.
+- **Lỗi Login failed:** Kiểm tra quyền truy cập Windows trên SQL Server.
+- **Lỗi Timeout:** Kiểm tra kết nối mạng hoặc giảm tải query.
+- Xem chi tiết trong file `SYSTEM_REQUIREMENTS.md`.
+
+---
+
+## 8. Đóng góp
+Nếu bạn muốn đóng góp, vui lòng tạo issue hoặc pull request trên GitHub.
+
+## 9. Giấy phép
+Dự án này được phân phối dưới giấy phép Apache License 2.0. Xem file `LICENSE` để biết thêm chi tiết.
+
+---
+
+*Tác giả: tranlammankg*
