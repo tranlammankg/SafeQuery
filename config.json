@@ -1,0 +1,13 @@
+{
+    "servers": [
+        "pa-vm41",
+        ""
+    ],
+    "databases": [
+        "testkinetic",
+        ""
+    ],
+    "last_server": "pa-vm41",
+    "last_database": "testkinetic",
+    "last_driver": "ODBC Driver 17 for SQL Server"
+}
